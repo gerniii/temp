@@ -6,8 +6,82 @@ using namespace std;
 
 
 void login();
-void signup();
 void menu();
+
+
+void signup(string member, string data){
+    system("clear");
+    int id;
+    string name, position;
+    cout<<"|========================|"<<endl;
+    cout<<"|     LIBRARY SYSTEM     |"<<endl;
+    cout<<"|========================|"<<endl;
+    cout<<"|       SIGNING UP...    |"<<endl;
+    cout<<"|========================|"<<endl;
+    cout<<" ENTER YOUR ID:";
+    cin.ignore();
+    cin>>id;
+
+    system("clear");
+    cout<<"|========================|"<<endl;
+    cout<<"|     LIBRARY SYSTEM     |"<<endl;
+    cout<<"|========================|"<<endl;
+    cout<<"|       SIGNING UP...    |"<<endl;
+    cout<<"|========================|"<<endl;
+    cout<<" ENTER YOUR NAME:";
+    cin.ignore();
+    getline(cin, name);
+
+    system("clear");
+    cout<<"|========================|"<<endl;
+    cout<<"|     LIBRARY SYSTEM     |"<<endl;
+    cout<<"|========================|"<<endl;
+    cout<<"|       SIGNING UP...    |"<<endl;
+    cout<<"|========================|"<<endl;
+    cout<<" ENTER YOUR POSITION:"<<endl;
+    cout<<" 1. Teacher"<<endl;
+    cout<<" 2. Student"<<endl;
+    cout<<" >> ";
+    cin.ignore();
+    getline(cin, position);
+
+//Identify the last index of file
+int index = 0;
+    ifstream inFile(member);
+    if(inFile){
+        string row;
+        while(getline(inFile, row)){
+            if(row.substr(0,5) == "Index"){ //Skips the header row
+                continue;
+            }
+            //Isolates index and converts to Integer
+            int i = stoi(row.substr(0,row.find(",")));
+            if (i > index){
+            // index = i allows the next wrriten book to be +1 in file
+                index = i;
+            }
+        }
+        inFile.close();
+    }
+
+    ofstream ofFile(member);
+    if(ofFile){
+        if(index == 0){//0 index means file is completely empty
+            ofFile << "INDEX,ID,NAME,POSITION" <<endl;
+        } //Insertion of Data
+        ofFile << index + 1 << "," << id << "," << name << "," << position <<endl;
+        ofFile.close();
+    }
+    else{
+        cout<<"ERROR: FILE NOT FOUND"<<endl;
+    }
+
+    cout<<"ACCOUNT SUCCESSFULY CREATED"<<endl;
+    menu();
+}
+
+
+
 
 
 void menu_err(){
@@ -23,12 +97,12 @@ void menu_err(){
     cout<<"|  !!!INVALID CHOICE!!!  |"<<endl;
     cout<<" Press enter to continue.."<<endl;
     getchar();
+    system("clear");
     menu();
 }
 
 
-void menu(){
-    system("clear");
+void menu(string member,string data){
     int choice;
     cout<<"|========================|"<<endl;
     cout<<"|     LIBRARY SYSTEM     |"<<endl;
@@ -43,7 +117,7 @@ void menu(){
     //login();
     }
     else if(choice == 2){
-    //signup();
+    signup(member, data);
     }
     else{
     menu_err();
